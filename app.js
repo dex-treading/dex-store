@@ -1,6 +1,6 @@
 // 1. تهيئة Supabase
 const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_ANON_KEY = 'sb_publishable_xc2on7X7FKcJ0pytTH5isg_W8bAEblm';
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // 2. مصفوفة المنتجات في الواجهة
