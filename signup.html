@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حساب جديد - المتجر الرقمي</title>
+    <title>حساب جديد - متجر DEX</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- استخدام النسخة المستقرة المحددة من مكتبة Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
 </head>
 <body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4">
@@ -17,10 +16,15 @@
                 <i class="fa-solid fa-user-plus"></i>
             </div>
             <h2 class="text-2xl font-bold">إنشاء حساب جديد</h2>
-            <p class="text-slate-400 text-sm mt-1">انضم إلينا واستمتع بتجربة تسوق رقمية</p>
+            <p class="text-slate-400 text-sm mt-1">انضم إلى متجر DEX واستمتع بتجربة فريدة</p>
         </div>
 
         <form id="signupForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium mb-1 text-slate-300">الاسم الكامل</label>
+                <input type="text" id="fullName" required placeholder="فارس عبدالله" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none text-white">
+            </div>
+
             <div>
                 <label class="block text-sm font-medium mb-1 text-slate-300">البريد الإلكتروني</label>
                 <input type="email" id="email" required placeholder="name@example.com" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none text-white">
@@ -29,6 +33,11 @@
             <div>
                 <label class="block text-sm font-medium mb-1 text-slate-300">كلمة المرور</label>
                 <input type="password" id="password" minlength="6" required placeholder="••••••••" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none text-white">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1 text-slate-300">كود الدعوة <span class="text-slate-500 text-xs">(اختياري)</span></label>
+                <input type="text" id="referralCode" placeholder="أدخل كود الدعوة إن وجد" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none text-white">
             </div>
 
             <button type="submit" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all mt-2">
@@ -46,18 +55,14 @@
         const SUPABASE_URL = 'https://jmrbmoygygdewhlvtbo.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptcnJibW95Z2d5ZGV3aGx2dGJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzODQ3OTIsImV4cCI6MjEwNzk2MDc5Mn0.hVB9okpIXoFIAS-C5dYBz7MZizYZtRpVn_KVya5jH2Y';
 
-        // تهيئة العميل مع إعدادات التخزين المحلي الآمنة
-        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-            auth: {
-                persistSession: true,
-                autoRefreshToken: true
-            }
-        });
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const fullName = document.getElementById('fullName').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const referralCode = document.getElementById('referralCode').value;
             const btn = document.getElementById('submitBtn');
 
             btn.innerText = 'جاري التسجيل...';
@@ -66,7 +71,13 @@
             try {
                 const { data, error } = await client.auth.signUp({ 
                     email: email, 
-                    password: password 
+                    password: password,
+                    options: {
+                        data: {
+                            full_name: fullName,
+                            referral_code: referralCode
+                        }
+                    }
                 });
 
                 if (error) throw error;
