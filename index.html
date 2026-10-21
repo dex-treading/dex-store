@@ -9,31 +9,28 @@
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen">
 
-    <!-- شريط التنقل العلوي (Navbar) -->
+    <!-- شريط التنقل العلوي -->
     <nav class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                
-                <!-- اللوجو -->
                 <div class="flex items-center gap-3">
-                    <div class="bg-indigo-600 text-white p-2 rounded-xl text-xl font-bold shadow-lg shadow-indigo-500/30">
+                    <div class="bg-indigo-600 text-white p-2 rounded-xl text-xl font-bold shadow-lg">
                         <i class="fa-solid fa-store"></i>
                     </div>
                     <span class="font-bold text-xl text-white">متجري الرقمي</span>
                 </div>
 
-                <!-- أزرار الواجهات الحسابية والتنقل -->
                 <div class="flex items-center gap-2">
                     <a href="login.html" class="px-3 py-2 text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-700 rounded-lg transition-all">
                         <i class="fa-solid fa-right-to-bracket ml-1"></i> دخول
                     </a>
                     <a href="signup.html" class="px-3 py-2 text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg shadow-md transition-all">
-                        تراخيص / حساب جديد
+                        حساب جديد
                     </a>
-                    <a href="profile.html" class="p-2 text-slate-300 hover:text-white hover:bg-slate-700 rounded-lg transition-all" title="المحفظة والحساب">
+                    <a href="profile.html" class="p-2 text-slate-300 hover:text-white hover:bg-slate-700 rounded-lg" title="المحفظة">
                         <i class="fa-solid fa-wallet text-lg"></i>
                     </a>
-                    <a href="deposit.html" class="p-2 text-emerald-400 hover:text-emerald-300 hover:bg-slate-700 rounded-lg transition-all" title="الإيداع">
+                    <a href="deposit.html" class="p-2 text-emerald-400 hover:text-emerald-300 hover:bg-slate-700 rounded-lg" title="الإيداع">
                         <i class="fa-solid fa-circle-plus text-lg"></i>
                     </a>
                 </div>
@@ -41,24 +38,21 @@
         </div>
     </nav>
 
-    <!-- شريط الأقسام الأربعة -->
+    <!-- أقسام المتجر -->
     <div class="bg-slate-800/50 border-b border-slate-700/50 py-3">
         <div class="max-w-7xl mx-auto px-4 flex items-center justify-center gap-2 overflow-x-auto">
-            <button onclick="filterCat('all')" class="cat-btn bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap">الكل</button>
-            <button onclick="filterCat('clothing')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap">الملابس</button>
-            <button onclick="filterCat('electronics')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap">الأجهزة الكهربائية</button>
-            <button onclick="filterCat('phones_computers')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap">الهواتف والحواسيب</button>
-            <button onclick="filterCat('sports_shoes')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap">الأحذية الرياضية</button>
+            <button onclick="filterCat('all')" class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap">الكل</button>
+            <button onclick="filterCat('clothing')" class="bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap">الملابس</button>
+            <button onclick="filterCat('electronics')" class="bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap">الأجهزة الكهربائية</button>
+            <button onclick="filterCat('phones_computers')" class="bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap">الهواتف والحواسيب</button>
+            <button onclick="filterCat('sports_shoes')" class="bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap">الأحذية الرياضية</button>
         </div>
     </div>
 
-    <!-- شبكة عرض المنتجات -->
+    <!-- شبكة المنتجات -->
     <main class="max-w-7xl mx-auto px-4 py-8">
         <h2 id="sectionTitle" class="text-2xl font-bold mb-6 text-white border-r-4 border-indigo-500 pr-3">جميع المنتجات</h2>
-        
-        <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- يتم التعبئة ديناميكياً بواسطة البرمجة -->
-        </div>
+        <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
     </main>
 
     <script>
