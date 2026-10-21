@@ -6,6 +6,7 @@
     <title>حساب جديد - متجر DEX</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
 </head>
 <body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4">
 
@@ -51,8 +52,11 @@
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://jmrrbmoyggydewhlvtbo.supabase.co/rest/v1/';
+        // الرابط الأساسي والمستقيم فقط بدون أي مسارات إضافية
+        const SUPABASE_URL = 'https://jmrrbmoyggydewhlvtbo.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptcnJibW95Z2d5ZGV3aGx2dGJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzODQ3OTIsImV4cCI6MjEwNzk2MDc5Mn0.hVB9okpIXoFIAS-C5dYBz7MZizYZtRpVn_KVya5jH2Y';
+
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -66,28 +70,18 @@
             btn.disabled = true;
 
             try {
-                // الاتصال المباشر عبر بروتوكول HTTP Fetch لتجاوز قيود الـ SDK
-                const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': SUPABASE_ANON_KEY
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        password: password,
+                const { data, error } = await client.auth.signUp({ 
+                    email: email, 
+                    password: password,
+                    options: {
                         data: {
                             full_name: fullName,
                             referral_code: referralCode
                         }
-                    })
+                    }
                 });
 
-                const result = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(result.msg || result.error_description || result.message || 'فشل الاتصال بخادم السيرفر');
-                }
+                if (error) throw error;
 
                 alert('تم إنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.');
                 window.location.href = 'login.html';
