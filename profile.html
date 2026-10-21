@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محفظتي وحسابي - المتجر الرقمي</title>
+    <title>محفظتي وحسابي - متجر DEX</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen p-4">
 
     <div class="max-w-3xl mx-auto py-6">
-        <!-- زر العودة -->
         <a href="index.html" class="inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300 font-semibold mb-6">
-            <i class="fa-solid fa-arrow-right"></i> العودة للمتجر
+            <i class="fa-solid fa-arrow-right"></i> العودة لمتجر DEX
         </a>
 
         <!-- بطاقة المحفظة والرصيد -->
@@ -21,11 +21,14 @@
                 <i class="fa-solid fa-wallet"></i>
             </div>
             <p class="text-indigo-200 text-sm font-medium">إجمالي رصيد المحفظة</p>
-            <h2 class="text-4xl font-extrabold text-white mt-2">$1,250.00</h2>
+            <h2 id="userBalance" class="text-4xl font-extrabold text-white mt-2">$0.00</h2>
             <div class="mt-6 flex gap-3">
                 <a href="deposit.html" class="bg-white text-indigo-600 font-bold px-5 py-2.5 rounded-xl text-sm shadow hover:bg-slate-100 transition-all">
                     <i class="fa-solid fa-plus-circle ml-1"></i> إيداع رصيد
                 </a>
+                <button onclick="handleLogout()" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 font-bold px-4 py-2.5 rounded-xl text-sm transition-all">
+                    تسجيل الخروج
+                </button>
             </div>
         </div>
 
@@ -35,15 +38,53 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <span class="text-slate-400 text-xs block">اسم المستخدم</span>
-                    <span class="font-semibold text-lg text-white">فارس عبدالله</span>
+                    <span id="userName" class="font-semibold text-lg text-white">جاري التحميل...</span>
                 </div>
                 <div>
                     <span class="text-slate-400 text-xs block">البريد الإلكتروني</span>
-                    <span class="font-semibold text-lg text-white">fares@example.com</span>
+                    <span id="userEmail" class="font-semibold text-lg text-white">جاري التحميل...</span>
                 </div>
             </div>
         </div>
     </div>
 
+    <script>
+        const SUPABASE_URL = 'https://jmrbmoygygdewhlvtbo.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptcnJibW95Z2d5ZGV3aGx2dGJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzODQ3OTIsImV4cCI6MjEwNzk2MDc5Mn0.hVB9okpIXoFIAS-C5dYBz7MZizYZtRpVn_KVya5jH2Y';
+
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function loadUserData() {
+            const { data: { session }, error } = await client.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const user = session.user;
+            document.getElementById('userEmail').innerText = user.email;
+
+            // جلب بيانات الملف الشخصي والرصيد
+            const { data: profile } = await client
+                .from('profiles')
+                .select('*')
+                .eq('id', user.id)
+                .single();
+
+            if (profile) {
+                document.getElementById('userName').innerText = profile.full_name || 'مستخدم DEX';
+                document.getElementById('userBalance').innerText = `$${(profile.balance || 0).toFixed(2)}`;
+            } else {
+                document.getElementById('userName').innerText = user.email.split('@')[0];
+            }
+        }
+
+        async function handleLogout() {
+            await client.auth.signOut();
+            window.location.href = 'login.html';
+        }
+
+        window.onload = loadUserData;
+    </script>
 </body>
 </html>
