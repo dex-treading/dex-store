@@ -11,8 +11,8 @@
 <body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4">
 
     <div class="bg-slate-800 p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-700">
-        <div class="text-center mb-8">
-            <div class="bg-emerald-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold shadow-lg">
+        <div class="text-center mb-6">
+            <div class="bg-emerald-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl font-bold shadow-lg">
                 <i class="fa-solid fa-user-plus"></i>
             </div>
             <h2 class="text-2xl font-bold">إنشاء حساب جديد</h2>
@@ -20,14 +20,28 @@
         </div>
 
         <form id="signupForm" class="space-y-4">
+            <!-- خانة الاسم -->
+            <div>
+                <label class="block text-sm font-medium mb-1 text-slate-300">الاسم الكامل</label>
+                <input type="text" id="fullName" required placeholder="فارس عبدالله" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none text-white">
+            </div>
+
+            <!-- خانة البريد الإلكتروني -->
             <div>
                 <label class="block text-sm font-medium mb-1 text-slate-300">البريد الإلكتروني</label>
                 <input type="email" id="email" required placeholder="name@example.com" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none text-white">
             </div>
 
+            <!-- خانة كلمة المرور -->
             <div>
                 <label class="block text-sm font-medium mb-1 text-slate-300">كلمة المرور</label>
                 <input type="password" id="password" minlength="6" required placeholder="••••••••" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none text-white">
+            </div>
+
+            <!-- خانة كود الدعوة (اختياري) -->
+            <div>
+                <label class="block text-sm font-medium mb-1 text-slate-300">كود الدعوة <span class="text-slate-500 text-xs">(اختياري)</span></label>
+                <input type="text" id="referralCode" placeholder="أدخل كود الدعوة إن وجد" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none text-white">
             </div>
 
             <button type="submit" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl shadow-lg transition-all mt-2">
@@ -49,16 +63,36 @@
 
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const fullName = document.getElementById('fullName').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const referralCode = document.getElementById('referralCode').value;
             const btn = document.getElementById('submitBtn');
 
-            btn.innerText = 'جاري التسجيل...';
+            btn.innerText = 'جاري إنشاء الحساب...';
             btn.disabled = true;
 
             try {
-                const { data, error } = await client.auth.signUp({ email, password });
-                if (error) throw error;
+                // 1. تسجيل الحساب الأساسي في نظام المصادقة
+                const { data: authData, error: authError } = await client.auth.signUp({ 
+                    email: email, 
+                    password: password 
+                });
+                
+                if (authError) throw authError;
+
+                const userId = authData.user ? authData.user.id : null;
+
+                if (userId) {
+                    // 2. حفظ البيانات الإضافية (الاسم وكود الدعوة) في جدول profiles
+                    const { error: profileError } = await client.from('profiles').insert([
+                        { id: userId, full_name: fullName, referral_code: referralCode }
+                    ]);
+
+                    if (profileError) {
+                        console.warn('ملاحظة بخصوص حفظ الملف الشخصي:', profileError.message);
+                    }
+                }
 
                 alert('تم إنشاء الحساب بنجاح!');
                 window.location.href = 'login.html';
