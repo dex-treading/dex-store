@@ -4,62 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المتجر الرقمي المتكامل</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- مكتبة Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
 
-    <!-- الهيدر وشريط التنقل -->
-    <header class="navbar">
-        <div class="logo">⚡ متجري الرقمي</div>
-        <nav class="categories-nav">
-            <button onclick="filterCategory('all')" class="active-cat">الكل</button>
-            <button onclick="filterCategory('clothing')">الملابس</button>
-            <button onclick="filterCategory('electronics')">الأجهزة الكهربائية</button>
-            <button onclick="filterCategory('phones_computers')">الهواتف والحواسيب</button>
-            <button onclick="filterCategory('sports_shoes')">الأحذية الرياضية</button>
-        </nav>
-        <div class="auth-buttons" id="authSection">
-            <button class="btn-login" onclick="openModal('loginModal')">تسجيل الدخول</button>
-            <button class="btn-signup" onclick="openModal('signupModal')">حساب جديد</button>
+    <!-- شريط التنقل العلوي (Navbar) -->
+    <nav class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- اللوجو -->
+                <div class="flex items-center gap-3">
+                    <div class="bg-indigo-600 text-white p-2 rounded-xl text-xl font-bold shadow-lg shadow-indigo-500/30">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <span class="font-bold text-xl text-white">متجري الرقمي</span>
+                </div>
+
+                <!-- أزرار الواجهات الحسابية والتنقل -->
+                <div class="flex items-center gap-2">
+                    <a href="login.html" class="px-3 py-2 text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-700 rounded-lg transition-all">
+                        <i class="fa-solid fa-right-to-bracket ml-1"></i> دخول
+                    </a>
+                    <a href="signup.html" class="px-3 py-2 text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg shadow-md transition-all">
+                        تراخيص / حساب جديد
+                    </a>
+                    <a href="profile.html" class="p-2 text-slate-300 hover:text-white hover:bg-slate-700 rounded-lg transition-all" title="المحفظة والحساب">
+                        <i class="fa-solid fa-wallet text-lg"></i>
+                    </a>
+                    <a href="deposit.html" class="p-2 text-emerald-400 hover:text-emerald-300 hover:bg-slate-700 rounded-lg transition-all" title="الإيداع">
+                        <i class="fa-solid fa-circle-plus text-lg"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- قسم عرض المنتجات -->
-    <main class="container">
-        <h2 id="categoryTitle">جميع المنتجات</h2>
-        <div class="products-grid" id="productsGrid">
-            <!-- يتم تحميل المنتجات هنا بواسطة JavaScript -->
+    <!-- شريط الأقسام الأربعة -->
+    <div class="bg-slate-800/50 border-b border-slate-700/50 py-3">
+        <div class="max-w-7xl mx-auto px-4 flex items-center justify-center gap-2 overflow-x-auto">
+            <button onclick="filterCat('all')" class="cat-btn bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap">الكل</button>
+            <button onclick="filterCat('clothing')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap">الملابس</button>
+            <button onclick="filterCat('electronics')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap">الأجهزة الكهربائية</button>
+            <button onclick="filterCat('phones_computers')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap">الهواتف والحواسيب</button>
+            <button onclick="filterCat('sports_shoes')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap">الأحذية الرياضية</button>
+        </div>
+    </div>
+
+    <!-- شبكة عرض المنتجات -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <h2 id="sectionTitle" class="text-2xl font-bold mb-6 text-white border-r-4 border-indigo-500 pr-3">جميع المنتجات</h2>
+        
+        <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- يتم التعبئة ديناميكياً بواسطة البرمجة -->
         </div>
     </main>
 
-    <!-- نافذة تسجيل الدخول (Modal) -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('loginModal')">&times;</span>
-            <h3>تسجيل الدخول</h3>
-            <form id="loginForm" onsubmit="handleLogin(event)">
-                <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" required>
-                <input type="password" id="loginPassword" placeholder="كلمة المرور" required>
-                <button type="submit" class="btn-submit">دخول</button>
-            </form>
-        </div>
-    </div>
+    <script>
+        const products = [
+            { id: 1, title: 'قميص قطني فاخر', category: 'clothing', price: 29.99, image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500' },
+            { id: 2, title: 'جاكيت شتوي', category: 'clothing', price: 64.99, image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500' },
+            { id: 3, title: 'خلاط كهربائي متطور', category: 'electronics', price: 85.00, image: 'https://images.unsplash.com/photo-1570222094114-d074f7e1e6e0?w=500' },
+            { id: 4, title: 'آلة صُنُع القهوة', category: 'electronics', price: 130.00, image: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=500' },
+            { id: 5, title: 'هاتف آيفون برو', category: 'phones_computers', price: 999.00, image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500' },
+            { id: 6, title: 'حاسوب محمول عالي الأداء', category: 'phones_computers', price: 1250.00, image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500' },
+            { id: 7, title: 'حذاء جري احترافي', category: 'sports_shoes', price: 75.00, image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500' },
+            { id: 8, title: 'حذاء رياضي يومي', category: 'sports_shoes', price: 55.00, image: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500' }
+        ];
 
-    <!-- نافذة إنشاء حساب (Modal) -->
-    <div id="signupModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('signupModal')">&times;</span>
-            <h3>إنشاء حساب جديد</h3>
-            <form id="signupForm" onsubmit="handleSignup(event)">
-                <input type="email" id="signupEmail" placeholder="البريد الإلكتروني" required>
-                <input type="password" id="signupPassword" placeholder="كلمة المرور (6 خانات على الأقل)" required minlength="6">
-                <button type="submit" class="btn-submit">تسجيل الحساب</button>
-            </form>
-        </div>
-    </div>
+        function renderProducts(list) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = list.map(item => `
+                <div class="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 shadow-lg hover:border-indigo-500/50 transition-all group">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-300">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg text-white mb-2">${item.title}</h3>
+                        <div class="flex items-center justify-between mt-4">
+                            <span class="text-emerald-400 font-bold text-xl">$${item.price}</span>
+                            <button class="bg-indigo-600 hover:bg-indigo-500 text-white p-2.5 rounded-xl transition-all">
+                                <i class="fa-solid fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-    <script src="app.js"></script>
+        function filterCat(cat) {
+            if (cat === 'all') {
+                renderProducts(products);
+            } else {
+                renderProducts(products.filter(p => p.category === cat));
+            }
+        }
+
+        window.onload = () => renderProducts(products);
+    </script>
 </body>
 </html>
