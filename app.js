@@ -1,6 +1,6 @@
 // 1. تهيئة Supabase
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'sb_publishable_xc2on7X7FKcJ0pytTH5isg_W8bAEblm';
+const SUPABASE_URL = 'sb_publishable_xc2on7X7FKcJ0pytTH5isg_W8bAEblm';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptcnJibW95Z2d5ZGV3aGx2dGJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzODQ3OTIsImV4cCI6MjEwNzk2MDc5Mn0.hVB9okpIXoFIAS-C5dYBz7MZizYZtRpVn_KVya5jH2Y';
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // 2. مصفوفة المنتجات في الواجهة
