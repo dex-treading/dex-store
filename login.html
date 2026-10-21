@@ -6,7 +6,6 @@
     <title>تسجيل الدخول - متجر DEX</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
 </head>
 <body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4">
 
@@ -45,8 +44,6 @@
         const SUPABASE_URL = 'https://jmrbmoygygdewhlvtbo.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptcnJibW95Z2d5ZGV3aGx2dGJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzODQ3OTIsImV4cCI6MjEwNzk2MDc5Mn0.hVB9okpIXoFIAS-C5dYBz7MZizYZtRpVn_KVya5jH2Y';
 
-        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
@@ -57,8 +54,23 @@
             btn.disabled = true;
 
             try {
-                const { data, error } = await client.auth.signInWithPassword({ email, password });
-                if (error) throw error;
+                const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_ANON_KEY
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error_description || result.msg || result.message || 'بيانات الدخول غير صحيحة');
+                }
+
+                // حفظ الرمز في التخزين المحلي للمتصفح
+                localStorage.setItem('supabase_token', result.access_token);
 
                 alert('تم تسجيل الدخول بنجاح!');
                 window.location.href = 'index.html';
