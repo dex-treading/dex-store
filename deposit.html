@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إيداع رصيد - المتجر الرقمي</title>
+    <title>إيداع رصيد - متجر DEX</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -11,16 +11,16 @@
 
     <div class="bg-slate-800 rounded-3xl p-8 max-w-lg w-full border border-slate-700 shadow-2xl">
         <a href="index.html" class="inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300 font-semibold mb-6">
-            <i class="fa-solid fa-arrow-right"></i> إلغاء والعودة
+            <i class="fa-solid fa-arrow-right"></i> إلغاء والعودة لمتجر DEX
         </a>
 
         <h2 class="text-2xl font-bold mb-2 text-white">إيداع رصيد في المحفظة</h2>
-        <p class="text-slate-400 text-sm mb-6">اختر طريقة الدفع المناسبة لشحن حسابك</p>
+        <p class="text-slate-400 text-sm mb-6">اختر طريقة الدفع المناسبة لشحن حسابك في متجر DEX</p>
 
-        <form class="space-y-4">
+        <form class="space-y-4" onsubmit="event.preventDefault(); alert('تم استلام طلب الإيداع بنجاح، سيتم معالجة العملية قريباً.'); window.location.href='profile.html';">
             <div>
                 <label class="block text-sm font-medium mb-2 text-slate-300">المبلغ المراد إيداعه ($)</label>
-                <input type="number" required placeholder="100" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 text-white focus:outline-none focus:border-indigo-500">
+                <input type="number" min="1" required placeholder="100" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 text-white focus:outline-none focus:border-indigo-500">
             </div>
 
             <label class="block text-sm font-medium text-slate-300 mt-4">وسيلة الدفع</label>
