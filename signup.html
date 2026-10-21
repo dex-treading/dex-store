@@ -20,11 +20,6 @@
 
         <form id="signupForm" class="space-y-4">
             <div>
-                <label class="block text-sm font-medium mb-1 text-slate-300">الاسم الكامل</label>
-                <input type="text" id="fullName" required placeholder="فارس عبدالله" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none transition-all text-white placeholder-slate-400">
-            </div>
-
-            <div>
                 <label class="block text-sm font-medium mb-1 text-slate-300">البريد الإلكتروني</label>
                 <input type="email" id="email" required placeholder="name@example.com" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none transition-all text-white placeholder-slate-400">
             </div>
@@ -34,7 +29,7 @@
                 <input type="password" id="password" minlength="6" required placeholder="••••••••" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none transition-all text-white placeholder-slate-400">
             </div>
 
-            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-600/30 transition-all mt-2">
+            <button type="submit" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-600/30 transition-all mt-2">
                 تسجيل الحساب
             </button>
         </form>
@@ -45,5 +40,39 @@
         </p>
     </div>
 
+    <!-- استدعاء مكتبة Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://jmrbmoygygdewhlvtbo.supabase.co';
+const SUPABASE_ANON_KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptcnJibW95Z2d5ZGV3aGx2dGJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzODQ3OTIsImV4cCI6MjEwNzk2MDc5Mn0.hVB9okpIXoFIAS-C5dYBz7MZizYZtRpVn_KVya5jH2Y';
+
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('submitBtn');
+
+            btn.innerText = 'جاري إنشاء الحساب...';
+            btn.disabled = true;
+
+            const { data, error } = await supabaseClient.auth.signUp({
+                email: email,
+                password: password
+            });
+
+            if (error) {
+                alert('خطأ أثناء التسجيل: ' + error.message);
+                btn.innerText = 'تسجيل الحساب';
+                btn.disabled = false;
+            } else {
+                alert('تم إنشاء الحساب بنجاح! إذا كان تفعيل البريد مفصّلاً ستستطيع الدخول فوراً.');
+                window.location.href = 'login.html'; // التوجيه لصفحة الدخول
+            }
+        });
+    </script>
 </body>
+    
 </html>
