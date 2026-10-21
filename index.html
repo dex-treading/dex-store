@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المتجر الرقمي المتكامل</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- مكتبة Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- الهيدر وشريط التنقل -->
+    <header class="navbar">
+        <div class="logo">⚡ متجري الرقمي</div>
+        <nav class="categories-nav">
+            <button onclick="filterCategory('all')" class="active-cat">الكل</button>
+            <button onclick="filterCategory('clothing')">الملابس</button>
+            <button onclick="filterCategory('electronics')">الأجهزة الكهربائية</button>
+            <button onclick="filterCategory('phones_computers')">الهواتف والحواسيب</button>
+            <button onclick="filterCategory('sports_shoes')">الأحذية الرياضية</button>
+        </nav>
+        <div class="auth-buttons" id="authSection">
+            <button class="btn-login" onclick="openModal('loginModal')">تسجيل الدخول</button>
+            <button class="btn-signup" onclick="openModal('signupModal')">حساب جديد</button>
+        </div>
+    </header>
+
+    <!-- قسم عرض المنتجات -->
+    <main class="container">
+        <h2 id="categoryTitle">جميع المنتجات</h2>
+        <div class="products-grid" id="productsGrid">
+            <!-- يتم تحميل المنتجات هنا بواسطة JavaScript -->
+        </div>
+    </main>
+
+    <!-- نافذة تسجيل الدخول (Modal) -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h3>تسجيل الدخول</h3>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" required>
+                <input type="password" id="loginPassword" placeholder="كلمة المرور" required>
+                <button type="submit" class="btn-submit">دخول</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة إنشاء حساب (Modal) -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h3>إنشاء حساب جديد</h3>
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <input type="email" id="signupEmail" placeholder="البريد الإلكتروني" required>
+                <input type="password" id="signupPassword" placeholder="كلمة المرور (6 خانات على الأقل)" required minlength="6">
+                <button type="submit" class="btn-submit">تسجيل الحساب</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
